@@ -94,7 +94,7 @@ def install(rType="MAIN"):
         os.system('tar -zxvf "/tmp/xtreamcodes.tar.gz" -C "/home/xtreamcodes/" > /dev/null')
         try: os.remove("/tmp/xtreamcodes.tar.gz")
         except: pass
-        return True
+        return no
     printc("Failed to download installation file!", col.FAIL)
     return False
 
@@ -233,7 +233,7 @@ def modifyNginx():
     printc("Modifying Nginx")
     rPath = "/home/xtreamcodes/iptv_xtream_codes/nginx/conf/nginx.conf"
     rPrevData = open(rPath, "r").read()
-    if not "listen 25500;" in rPrevData:
+    if not "listen 80;" in rPrevData:
         shutil.copy(rPath, "%s.xc" % rPath)
         rData = "}".join(rPrevData.split("}")[:-1]) + "    server {\n        listen 25500;\n        index index.php index.html index.htm;\n        root /home/xtreamcodes/iptv_xtream_codes/admin/;\n\n        location ~ \.php$ {\n			limit_req zone=one burst=8;\n            try_files $uri =404;\n			fastcgi_index index.php;\n			fastcgi_pass php;\n			include fastcgi_params;\n			fastcgi_buffering on;\n			fastcgi_buffers 96 32k;\n			fastcgi_buffer_size 32k;\n			fastcgi_max_temp_file_size 0;\n			fastcgi_keep_conn on;\n			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;\n			fastcgi_param SCRIPT_NAME $fastcgi_script_name;\n        }\n    }\n}"
         rFile = open(rPath, "w")
@@ -282,7 +282,7 @@ if __name__ == "__main__":
                 if rType.upper() == "MAIN":
                     printc("Please store your MySQL password!")
                     printc(rPassword)
-                    printc("Admin UI Wan IP: http://%s:25500" % getIP())
+                    printc("Admin UI Wan IP: http://%s:80" % getIP())
                     printc("Admin UI default login is admin/admin")
             else: printc("Installation cancelled", col.FAIL)
         else: printc("Invalid entries", col.FAIL)
